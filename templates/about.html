@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<section class="relative mt-32 w-full h-80 flex justify-between items-center bg-proj-light-blue overflow-hidden">
+    <div class="w-fit p-8 px-16 flex flex-col items-center text-center gap-3">
+        <h1 class="text-5xl font-bold">About Us</h1>
+        <span class="text-xl font-bold">Feline Accomodation and Reservation</span>
+    </div>
+    <img src="/static/images/rorocat3.png" class="absolute w-3/4 translate-x-[27rem] object-cover object-center" alt="majestic rorocat">
+</section>
+
+<section class="flex justify-between items-center gap-x-16 p-8 px-16">
+    <p class="text-justify text-lg w-full">
+        We started this because we love cats and saw a need for better care when owners are away. Our team includes cat lovers with different skills but the same dedication to providing top-notch care.
+        <br><br>
+        We're here to make sure every cat feels loved and comfortable, just like they do at home. Seeing cats thrive in our care is what drives us every day.
+        <br><br>
+        Our mission is simple: to give every cat the best care possible. And that's what we're committed to, no matter what. <span class="font-bold">Welcome to OnlyCats 🐾 – where every whisker is welcome!</span>
+    </p>
+    <div class="overflow-hidden rounded-lg w-3/5 h-80">
+        <img src="/static/images/cat-business2.avif" alt="cat" class="object-cover w-full h-full">
+    </div>
+    
+    
+</section>
+<section class="p-8 px-16">
+    <div class="bg-proj-light-blue rounded-xl w-full flex justify-around items-center p-10 text-xl font-bold">
+        <div class="flex flex-col gap-2 p-2 rounded-lg items-center hover:scale-105 transition-transform duration-300 ease-in-out">
+            <img src="/static/images/satisfied.webp" class="w-24 h-24" alt="satisfied">
+            <p>99% Customer</p>
+            <p>Satisfaction</p>
+        </div>
+        <div class="flex flex-col gap-2 p-2 rounded-lg items-center hover:scale-105 transition-transform duration-300 ease-in-out">
+            <img src="/static/images/staff.png" class="w-24 h-24" alt="staff">
+            <p>50+</p>
+            <p>Staff Members</p>
+        </div>
+        <div class="flex flex-col gap-2 p-2 rounded-lg items-center hover:scale-105 transition-transform duration-300 ease-in-out">
+            <img src="/static/images/review.webp" class="w-24 h-24" alt="reviews">
+            <p>Glowing 5 Star</p>
+            <p>Reviews</p>
+        </div>
+        <div class="flex flex-col gap-2 p-2 rounded-lg items-center hover:scale-105 transition-transform duration-300 ease-in-out">
+            <img src="/static/images/hotel.webp" class="w-24 h-24" alt="rooms">
+            <p>Over 40</p>
+            <p>Available Rooms</p>
+        </div>
+    </div>
+</section>
+<section class="p-8 px-16">
+    <h1 class="font-bold text-5xl text-center">Meet the developers</h1>
+    <div class="grid grid-cols-4 p-8 text-center">
+        {% for member in members %}
+        <div class="flex flex-col gap-2 p-2 items-center hover:scale-105 transition-transform duration-150 ease-in-out">
+            <div class="rounded-full overflow-hidden">
+                <img src="{{member['image']}}" class="h-48 w-48 aspect-square object-cover" alt="{{member['name']}}">
+            </div>
+            <p class="text-xl font-bold">{{member['name']}}</p>
+            <p>{{member['role']}}</p>
+            <p class="italic text-sm">{{member['quote']}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="p-8 px-16">
+    <div class="bg-proj-light-blue rounded-xl border-4 border-proj-blue w-full flex items-center overflow-hidden">
+        <div class="w-1/2 h-[32rem] flex flex-col">
+            <div id="embedded-map-display" style="height:100%; width:100%;max-width:100%;">
+                <iframe style="height:100%;width:100%;border:0;" frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=Management+Science+University&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8">
+                </iframe>
+            </div>
+            <style>
+                #embedded-map-display img{max-width:none!important;background:none!important;font-size: inherit;font-weight:inherit;}
+            </style>
+        </div>
+        
+        <div class="w-1/2 h-[32rem] p-8 flex flex-col justify-end items-center gap-3 bg-[url('/static/images/peeking.jpg')] bg-center text-white">
+            <h1 class="text-4xl font-bold">Interested in joining our team?</h1>
+            <p class="text-2xl font-bold">Contact us now!</p>
+            <div class="flex gap-3">
+                <a class="flex gap-2 rounded-md p-2 bg-gray-200 hover:scale-105 transition-transform duration-150 text-black font-bold w-40" href="https://wa.me/+60148563852"><img src="/static/images/wapp.png" class="w-6 h-6" alt="whatsapp">WhatsApp</a>
+                <a class="flex gap-2 rounded-md p-2 bg-gray-200 hover:scale-105 transition-transform duration-150 text-black font-bold w-40" href="https://www.instagram.com/onlycats_/"><img src="/static/images/ig.png" class="w-6 h-6" alt="instagram">Instagram</a>
+                <a class="flex gap-2 rounded-md p-2 bg-gray-200 hover:scale-105 transition-transform duration-150 text-black font-bold w-40" href="https://www.youtube.com/@CatsOnlyChannel"><img src="/static/images/yt.png" class="h-6" alt="youtube">YouTube</a>
+            </div>
+            
+        </div>
+        
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+	<!--<hr class="w-full my-2 border-1 border-black">-->
+<section class="flex flex-col mt-20 p-4 items-center justify-center overflow-auto gap-10 mb-8">
+	<div><h1 class="text-3xl font-bold">All Rooms</h1></div>
+    
+	{% for id, room in rooms.items() %}
+	<form method="get" action="/reserve" class="w-5/6 max-h-96 bg-proj-light-blue rounded-xl flex justify-stretch overflow-hidden">
+		<div class="flex-1 overflow-hidden">
+			<img class="hover:scale-105 min-h-full object-cover transition-transform duration-300 ease-in-out" src="{{room['image']}}" alt="{{room['type']}} picture">
+		</div>
+		<div class="flex-[2] w-full flex flex-col space-y-2 p-8">
+			<p class="font-bold text-3xl">{{room['type']}}</p>
+			<ul>
+				<li>&check; {{room['beds']}} {% if room['beds'] > '1' %} Beds 🐈{% else %} bed 🐈{% endif %}</li>
+				<li>&check; Premium Food 🍔</li>
+				<li>&check; Premium Beds 🛏️</li>
+                <li>&check; Infinite Fun 😺</li>
+				<li>&check; 24/7 CCTV Monitoring 📹</li>
+			</ul>
+			<hr class="w-full my-2 border-1 border-black">
+			<p class="font-bold text-xl">From RM{{room['price']}} per night</p>
+			<p class="text-xs">For first cat. Additional RM10 for each extra cat added.</p>
+			<div class="h-full flex flex-col justify-end">
+				<div class="flex justify-between items-center">
+					<p class="text-xl">Non-Refundable</p>
+                    <input type="hidden" value="{{id}}" name="id">
+					<button type="submit" class="bg-proj-blue p-2 rounded-lg hover:bg-proj-orange w-1/2 text-center transition transition-colors duration-150 ease-in-out">Book Now</button>
+				</div>
+			</div>
+		</div>			
+	</form>
+
+	{% endfor %}
+
+</section>
+
+
+{% endblock %}

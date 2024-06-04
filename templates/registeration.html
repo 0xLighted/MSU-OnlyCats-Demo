@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<section class="bg-[url('/static/images/cat-play.jpg')] h-screen bg-center bg-cover bg-no-repeat relative">
+    <div class="ml-16 mt-44 absolute left-0 w-1/3">
+        <h1 class="font-great-vibes text-6xl text-white">"The beginning is the most <strong>Important</strong> part of the work"</h1>
+        <span class="text-white text-xl italic drop-shadow-md">- Gray Cat</span>
+    </div>
+    <div class="p-8 absolute right-0 h-full w-1/3">
+        <div class="bg-proj-light-blue h-full w-100% p-10 flex flex-col justify-between rounded-md">
+            <h1 class="text-3xl font-bold">Sign up</h1>
+            <form action="#" class="flex flex-col gap-5" method="post">
+                <div class="flex gap-5">
+                    <label for="fname" class="font-bold">
+                        <p>FIRST NAME</p>
+                        <input type="text" id="fname" name="fname" class="w-full p-2 px-5 bg-transparent outline-none border-b-2 border-black" required placeholder="Osama">
+                    </label>
+                    <label for="lname" class="font-bold">
+                        <p>LAST NAME</p>
+                        <input type="text" id="lname" name="lname" class="w-full p-2 px-5 bg-transparent outline-none border-b-2 border-black" required placeholder="Laden">
+                    </label>
+                </div>
+                <label for="email" class="font-bold">
+                    <p>EMAIL ADDRESS</p>
+                    <input type="text" id="email" name="email" class="w-full p-2 px-5 bg-transparent outline-none border-b-2 border-black" required placeholder="example@gmail.com">
+                </label>
+                <label for="password" class="font-bold">
+                    <p>PASSWORD</p>
+                    <input type="password" id="password" name="password" class="w-full p-2 px-5 bg-transparent outline-none border-b-2 border-black" maxlength="16" minlength="8" required placeholder="Password">
+                </label>
+                <div class="flex justify-between items-center">
+                    <label for="agreed" class="font-bold flex justify-around items-center gap-2">
+                        <input type="checkbox" id="agreed" class=" p-2 px-5 bg-transparent outline-none border-b-2 border-black" required placeholder="Password">
+                        <p>I agree to the <a href="/tos" class="text-proj-orange hover:scale-105 transition-transform" style="text-shadow: 1px 1px #777777;">Terms of Conditions</a></p>
+                    </label>
+                    <input type="submit" value="Sign Up" class="bg-proj-orange p-2 px-7 rounded-md hover:scale-105 cursor-pointer transition-transform">
+                </div>
+            </form>
+            <div class="flex items-center"> 
+                <hr class="flex-grow border-t border-black"> 
+                <span class="px-3 text-black"> 
+                    OR
+                </span> 
+                <hr class="flex-grow border-t border-black"> 
+            </div> 
+            <div class="flex flex-col gap-5">
+                <a href="https://google.com/" class="w-full border h-12 bg-white rounded-md flex justify-evenly items-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/150px-Google_%22G%22_logo.svg.png" alt="Google" class="h-3/4">
+                    <span>Sign in with Google</span>
+                    <span></span>
+                </a>
+                <a href="https://github.com/" class="w-full border h-12 bg-gray-800 rounded-md flex justify-evenly items-center">
+                    <img src="https://github.githubassets.com/favicons/favicon-dark.svg" alt="Github" class="h-3/4">
+                    <span class="text-white">Sign in with Github</span>
+                    <span></span>
+                </a>
+            </div>
+            <p class="mx-auto">Already have an account? <a href="/login" class="text-proj-orange hover:scale-105 transition-transform" style="text-shadow: 1px 1px #777777;">Sign in!</a></p>
+            <span></span>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'profile.html' %}
+
+{% block content %}
+
+<section class="flex flex-col gap-8">
+    <h1 class="text-3xl font-bold">DASHBOARD</h1>
+    <div class="w-full border border-black p-8 flex flex-col">
+        <div class="flex justify-between items-center gap-16">
+            <div class="grow flex flex-col gap-5">
+                <h2 class="text-2xl font-bold">Profile</h2>
+                <form action="/update/name" method="post" class="flex gap-4">
+                    <input type="text" name="fname" id="fname" placeholder="{{session['user']['fname']}}" class="w-full p-2 px-5 bg-transparent outline-none border-b-2 border-black" required>
+                    <input type="text" name="lname" id="lname" placeholder="{{session['user']['lname']}}" class="w-full p-2 px-5 bg-transparent outline-none border-b-2 border-black" required>
+                    <input type="submit" class="bg-proj-light-blue p-2 px-4 rounded-md hover:scale-105 hover:bg-proj-blue transition-all" value="&check;">
+                </form>
+                <div class="flex flex-col gap-5">
+                    <form action="/update/email" method="post" class="flex gap-4">
+                        <input type="email" name="email" id="email" placeholder="{{session['user']['email']}}" class="w-full p-2 px-5 bg-transparent outline-none border-b-2 border-black" required>
+                        <input type="submit" class="bg-proj-light-blue p-2 px-4 rounded-md hover:scale-105 hover:bg-proj-blue transition-all" value="&check;">
+                    </form>
+                    {% if session['user']['number'] %}
+                    <form action="/update/number" method="post" class="flex gap-4">
+                        <input type="tel" name="number" id="number" placeholder="{{session['user']['number']}}" class="w-full p-2 px-5 bg-transparent outline-none border-b-2 border-black" required>
+                        <input type="submit" class="bg-proj-light-blue p-2 px-4 rounded-md hover:scale-105 hover:bg-proj-blue transition-all" value="&check;">
+                    </form>
+                    {% else %}
+                    <form action="/update/number" method="post" class="flex gap-4">
+                        <input type="tel" name="number" id="number" placeholder="Phone Number" class="w-full p-2 px-5 bg-transparent outline-none border-b-2 border-black" required>
+                        <input type="submit" class="bg-proj-light-blue p-2 px-4 rounded-md hover:scale-105 hover:bg-proj-blue transition-all" value="&check;">
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+
+            <form  action="/update/pfp" method="post" enctype="multipart/form-data" class="relative w-fit  flex justify-center items-center rounded-full hover:scale-105 transition-transform duration-300 ease-in-out">
+                <img id="bruh" class="w-52 h-52 object-cover rounded-full" src="/static/images/pfps/{{ session['user']['pfp'] }}" alt="PFP">
+                <img id="preview" class="hidden w-52 h-52 object-cover rounded-full" src="#" alt="PFP-new">
+                <label for="upload">
+                    <div class="flex cursor-pointer items-center text-center absolute top-0 left-0 bg-proj-gray/25 opacity-0 hover:opacity-100 z-10 w-full h-full rounded-full text-proj-white transition-opacity ease-in-out duration-150">
+                        <p id="change-icon" class="justify-center items-center w-full">
+                            <img class="w-12 h-12 mx-auto object-cover" src="/static/images/edit.svg" alt="PENCIL">
+                        </p>
+                        <input id="upload" type="file" name="pfp" accept="image/png, image/jpeg" class="pl-6 pt-44 hidden" required/>
+                     </div>
+                </label>
+                <input type="submit" value="&check;" class="absolute rounded-full bottom-0 right-0 w-12 h-12 bg-proj-light-blue hover:bg-proj-blue transition-[background-color] p-2 text-center">
+            </form>
+            
+        </div>
+    </div>
+
+    <div class="w-full border border-black p-8">
+        <form action="/update/password" method="post" class="flex flex-col gap-5">
+        <!-- <div class="w-full flex flex-col gap-5"> -->
+            <h2 class="text-2xl font-bold">Change Password</h2>
+            <input type="password" name="oldpass" id="oldpass" placeholder="Old Password" class=" p-2 px-5 bg-transparent outline-none border-b-2 border-black" maxlength="16" minlength="8" required>
+            <input type="password" name="newpass" id="newpass" placeholder="New Password" class=" p-2 px-5 bg-transparent outline-none border-b-2 border-black" maxlength="16" minlength="8" required>
+            <input type="submit" value="Change Password &check;" class=" w-3/4 mx-auto bg-proj-light-blue p-2 px-4 rounded-md hover:scale-105 hover:bg-proj-blue transition-all">
+        <!-- </div> -->
+        </form>
+    </div>
+</section>
+
+<script>
+    const uploadInput = document.getElementById('upload');
+    const placeholderImage = document.getElementById('bruh');
+    const previewImage = document.getElementById('preview');
+
+    uploadInput.addEventListener('change', function() {
+      const file = this.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.addEventListener('load', function() {
+            placeholderImage.style.display = 'none';
+            previewImage.style.display = 'block';
+            previewImage.src = reader.result;
+        });
+
+        reader.readAsDataURL(file);
+      }
+    });
+</script>
+
+{% endblock %}

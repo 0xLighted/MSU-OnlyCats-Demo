@@ -1,13 +1,97 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{% block title %}{% endblock %}</title>
-        <link href="./output.css" rel="stylesheet" />
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/Logo.png">
+    <title>{{ title }} - OnlyCats</title>
+    <link href="/static/css/output.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Sriracha&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% with msg = get_flashed_messages() %}
+        {% if msg %}
+            {% for m in msg %}
+                <script>alert("{{m}}")</script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</head>
+<body class="h-screen bg-proj-white font-comfortaa">
+    <nav class="w-full p-10 px-16 absolute top-0 z-50 box-border items-center flex justify-between">
+        <div class="flex gap-10 items-center {% if light_head %}text-white{% endif %}">
+            <a href="/">
+                {% if light_head %}
+                <img src="/static/images/Brand-white.webp" alt="OnlyCats" width="150" class="hover:scale-105 transition-transform">
+                {% else %}
+                <img src="/static/images/Brand.png" alt="OnlyCats" width="150" class="hover:scale-105 transition-transform">
+                {% endif %}
+            </a>
+            <a href="/rooms" class="hover:scale-105 transition-transform text-2xl align-baseline">Book with us!</a>
+
+            <!-- <a href="/about" class="hover:scale-105 transition-transform text-2xl align-baseline">About Us</a> -->
+        </div>
+        {% if title not in ['Login', 'Register'] %}
+        <div class="flex gap-10 items-center cursor-pointer">
+            {% if 'user' in session %}
+            <a href="/profile">
+                <img src="/static/images/pfps/{{ session['user']['pfp'] }}" alt="{{ session['user']['pfp'] }}" width="50" class="rounded-full hover:scale-105 transition-transform aspect-square object-cover">
+            </a>
+            {% else %}
+            <a href="/register" class="hover:scale-105 transition-transform text-xl">
+                Register
+            </a>
+            <a href="/login" class="hover:scale-105 transition-transform text-xl bg-proj-blue p-2 px-7 rounded-lg">
+                Login
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </nav>
+    <main>
         {% block body %}{% endblock %}
-    </body>
+    </main>
+    <footer class="bg-proj-light-blue p-10 px-32 text-center text-left text-black">
+        <div class="flex justify-between">
+            <div class="flex flex-col justify-between">
+                <ul id="branding">
+                    <img src="/static/images/Brand.png" alt="branding" width="150px" class="mb-2">
+                    <p>Welcome to OnlyCats 🐾 – where every whisker is welcome!</p>
+                </ul>
+                <span class="text-left">© 2024, All rights reserved</span>
+            </div>
+            <div class="inline-flex gap-10 text-left">
+                <ul id="nav">
+                    <li class="my-3">
+                        <h1 class="font-bold text-center">The Company</h1>
+                    </li>
+                    <hr class="border-black my-3">
+                    <li class="my-3 hover:underline">
+                        <a href="/about">About Us</a>
+                    </li>
+                    <li class="my-3 hover:underline">
+                        <a href="https://wa.me/+60148563852" target="_blank">Contact Us</a>
+                    </li>
+                </ul>
+                <ul id="socials">
+                    <li class="my-3">
+                        <h1 class="font-bold text-center">Socials</h1>
+                    </li>
+                    <hr class="border-black my-3">
+                    <li class="my-3 hover:underline">
+                        <a href="https://wa.me/+60148563852" target="_blank">Whatsapp</a>
+                    </li>
+                    <li class="my-3 hover:underline">
+                        <a href="https://www.instagram.com/onlycats_/" target="_blank">Instagram</a>
+                    </li>
+                    <li class="my-3 hover:underline">
+                        <a href="https://www.youtube.com/@CatsOnlyChannel" target="_blank">Youtube</a>
+                    </li>
+                </ul>
+                <ul id="login"></ul>
+            </div>
+        </div>
+    </footer>
+</body>
 </html>

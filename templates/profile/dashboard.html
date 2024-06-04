@@ -1,0 +1,183 @@
+{% extends 'profile.html' %}
+
+{% block content %}
+
+<div id="CCTV-modal" class="absolute top-0 left-0 w-full h-full p-10 z-50 hidden">
+    <div class="relative bg-black w-full h-full">
+        <button onclick="toggleModal()" class="absolute m-5 z-10 text-3xl hover:text-red-500 cursor-pointer">
+            X
+        </button>
+        <video src="/static/videos/cat_cctv.mp4" class="w-full h-full object-cover" autoplay muted loop></video>
+    </div>
+</div>
+
+<h1 class="text-3xl font-bold mb-3">DASHBOARD</h1>
+<h2 class="text-2xl font-bold mb-3">Bookings</h2>
+<section class="flex flex-col gap-5 mb-10">
+    {% for book in bookings %}
+    <button class="text-left bg-proj-light-blue rounded-md p-3 relative" id="container-{{ loop.index }}" onclick="toggleDropdown({{ loop.index }})">
+        <div class="flex">
+            <img src="{{book['room']['image']}}" alt="catHotel2" class="h-44 aspect-square object-cover rounded h-40">
+            <div class="w-full flex justify-between">
+                <div class="grow ml-3">
+                    <h3 class="text-lg font-bold">{{book['room']['type']}}</h3>
+                    <p>UUID: {{book['uuid']}}</p>
+                    <p>Session: {{book['checkin']}} till {{book['checkout']}}</p>
+                    {% for detail in (book.keys()|list)[::-1] %}
+                        {% if detail.startswith('cat-') and not break %}
+                            <p>Cats: {{ detail.split('-')[1] }}</p>
+                            {% break %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% if book['status'] == 'ONGOING' %}
+                <div class="flex gap-2">
+                    <input value="CCTV" onclick="toggleModal()" type="button" class="my-auto -rotate-90 rounded-lg bg-proj-blue hover:bg-proj-orange transition-[background-color] p-2 px-5 cursor-pointer">
+                    <div class="my-auto -rotate-90 rounded-lg" id="status-{{loop.index0}}">
+                        {{book['status']}}
+                    </div>
+                </div>
+                {% else %}
+                    <div class="my-auto -rotate-90 rounded-lg" id="status-{{loop.index0}}">
+                        {{book['status']}}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        
+        
+        <div class="flex items-center absolute -translate-x-2/4 bottom-0 left-1/2 w-2/3"> 
+            <hr class="flex-grow border-t border-black"> 
+            <span id="click-{{ loop.index }}" class="px-3 text-black"> 
+                Click to view more details
+            </span> 
+            <hr class="flex-grow border-t border-black"> 
+        </div>
+        
+        <div id="dropdown-{{ loop.index }}" class="hidden flex flex-col mt-3 mb-8 gap-2">
+            <hr class="w-full border-t border-black"> 
+            <h3 class="text-xl font-bold">Booking Summary</h3>
+            
+            {% for detail in book.keys() %}
+                {% if detail.startswith('cat-') %}
+                    <div class="flex justify-center items-center gap-5">
+                        <p>•</p>
+                        <p class="">{{ detail.replace('-', ' ') }}</p>
+                        <p class="">{{ book[detail]['name'] }}</p>
+                        <hr class="grow border-dotted border-black">
+                        <p class="">{{ book[detail]['breed'] }}</p>
+                        {% if book['status'] == "COMPLETED" %}
+                        <input type="button" value="View" class="bg-proj-blue hover:bg-proj-orange transition-[background-color] rounded-md p-2 px-3"
+                               onclick="showCatDetails('{{ book[detail]['name'] }}', '{{ book[detail]['age'] }}', '{{ book[detail]['weight'] }}', '{{ book[detail]['breed'] }}', '{{book['checkin']}}')">
+                        {% endif %}
+                    </div>            
+                {% endif %}
+            {% endfor %}
+
+            <p class="text-xl font-bold">Addons</p>
+            {% for detail in book.keys() %}
+                {% if detail.startswith('service-') %}
+                    <p class="">{{ services[detail.split('-')[1]|int]['type'] }}</p>
+                {% endif %}
+            {% endfor %}
+
+            <p class="text-xl font-bold">Special Requests</p>
+            <p class="">"{{book['details']}}"</p>
+        </div>
+    </button>
+
+    <div id="Summary" class="absolute top-0 left-0 w-full h-full p-10 z-50 backdrop-blur-sm flex justify-center items-center hidden">
+        <div class="bg-proj-blue w-3/4 px-16 py-8 rounded-lg flex flex-col gap-5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold">Medical Summary</h1>
+                    <img src="/static/images/medical.svg" class="h-12 w-12" alt="medical">
+                </div>
+                <button onclick="toggleSummary()" class="text-lg bg-proj-orange py-2 px-3 rounded-md hover:scale-105 transition-transform ease-in-out duration-150">
+                    Close <span class="font-bold">X</span>
+                </button>
+            </div>
+            <img src="/static/images/caticon.svg" class="h-24 w-24" alt="cat">
+            <div class="flex gap-2 border border-black rounded-md p-3 w-full">
+                <div class="flex flex-col w-1/3">
+                    <p class="font-bold">&check; Cat name</p>
+                    <p class="font-bold">&check; Age (Years)</p>
+                    <p class="font-bold">&check; Weight (KG)</p>
+                    <p class="font-bold">&check; Breed</p>
+                </div>
+                <div class="flex flex-col">
+                    <p id="cat-name">Cat name here</p>
+                    <p id="cat-age">Cat age here</p>
+                    <p id="cat-weight">5</p>
+                    <p id="cat-breed">Cat breed here</p>
+                </div>
+            </div>
+
+            <div class="flex gap-2 border border-black rounded-md p-3 w-full">
+                <div class="flex flex-col w-1/3">
+                    <p class="font-bold">&check; Coat & Skin</p>
+                    <p class="font-bold">&check; Eyes</p>
+                    <p class="font-bold">&check; Ears</p>
+                    <p class="font-bold">&check; Mouth & Teeth</p>
+                    <p class="font-bold">&check; Abdomen</p>
+                    <p class="font-bold">&check; Joints</p>
+                </div>
+                <div class="flex flex-col">
+                    <p>Healthy, no signs of parasites or infections</p>
+                    <p>Clear, no discharge</p>
+                    <p>Clean, no signs of infection</p>
+                    <p>Mild tartar buildup, gums healthy</p>
+                    <p>No abnormalities felt</p>
+                    <p>No swelling or pain on palpation</p>
+                </div>
+            </div>
+
+            <div class="flex gap-2 border border-black rounded-md p-3 w-full">
+                <p class="font-bold w-1/3">&check; Recommendations</p>
+                <p>Feed him more Shawarmas!</p>
+            </div>
+            
+            <p class="text-xl font-bold">Examined by: Dr. Rozaimi Adam</p>
+            <div class="flex gap-2"><p class="font-bold">Date:</p><p id="examdate">{{book['checkin']}}</p></div>
+            
+        </div>
+    </div>
+    {% endfor %}
+</section>
+
+<script>
+    const cctv_modal = document.getElementById("CCTV-modal");
+    const summary = document.getElementById("Summary");
+    const click = document.getElementById('click');
+    
+    function toggleDropdown(index) {
+        const dropdown = document.getElementById(`dropdown-${index}`);
+        const clickText = document.getElementById(`click-${index}`);
+        const curText = "Click to view more details";
+        const newText = "Click to hide details";
+        
+        dropdown.classList.toggle('hidden');
+        clickText.innerHTML = dropdown.classList.contains('hidden') ? curText : newText;
+    }
+
+    function toggleModal(e) {
+        cctv_modal.classList.toggle('hidden');
+    }
+
+    function toggleSummary() {
+        summary.classList.toggle('hidden');
+    }
+
+    function showCatDetails(name, age, weight, breed, checkin) {
+        document.getElementById('cat-name').textContent = name;
+        document.getElementById('cat-age').textContent = age;
+        //document.getElementById('cat-weight').textContent = weight;
+        document.getElementById('cat-breed').textContent = breed;
+        document.getElementById('examdate').textContent = checkin;
+        document.getElementById('Summary').classList.remove('hidden');
+    }
+    
+</script>
+
+{% endblock %}

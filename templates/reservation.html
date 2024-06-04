@@ -1,0 +1,311 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<section id="details" class="mt-28 mb-8 items-center justify-center flex flex-col">
+
+	<form action="/payment" target="" method="post" class="w-4/5 p-8 px-16 flex flex-col justify-center gap-5 rounded-lg bg-proj-light-blue">
+        <div class="w-[90%] flex gap-5 mb-8">
+            <img src="{{room['image']}}" alt="Penthouse Suite" class="w-60 h-60 aspect-square object-cover rounded-lg">
+            <div class="flex flex-col gap-2">
+                <a href="rooms" class="flex items-center justify-center gap-2 text-3xl font-bold hover:scale-105 transition-transform mt-auto">
+                    <span class="font-bold">{{ room['type'] }}</span>
+                    <img src="/static/images/edit.svg" class="h-8" alt="edit">
+                </a>
+                <ul class="text-lg mb-auto">
+                    <li>&check; {{room['beds']}} {% if room['beds'] > '1' %} Beds 🐈{% else %} bed 🐈{% endif %}</li>
+                    <li>&check; Premium Food 🍔</li>
+                    <li>&check; Premium Beds 🛏️</li>
+                    <li>&check; Infinite Fun 😺</li>
+                    <li>&check; 24/7 CCTV Monitoring 📹</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h1 class="text-xl font-bold">Your Details</h1>
+        {% if 'user' in session %}
+		<div class="w-[90%] mx-auto flex justify-items-stretch items-center border-0 gap-5 mb-8">
+            <input required id="lname" name="lname" type="text" placeholder="Last Name" class="rounded-lg w-full bg-proj-white p-2 border-none placeholder:text-black focus:outline-none" value="{{ session['user']['lname'] }}">
+            <input required id="email" name="email" type="text" placeholder="Email" class="rounded-lg w-full bg-proj-white p-2 border-none placeholder:text-black focus:outline-none" value="{{ session['user']['email'] }}">
+		</div>
+        {% else %}
+		<div class="w-[90%] mx-auto flex justify-items-stretch items-center border-0 gap-5 mb-8">
+            <input required id="fname" name="fname" type="text" placeholder="First Name" class="rounded-lg w-full bg-proj-white p-2 border-none placeholder:text-black focus:outline-none">
+            <input required id="lname" name="lname" type="text" placeholder="Last Name" class="rounded-lg w-full bg-proj-white p-2 border-none placeholder:text-black focus:outline-none">
+		</div>
+
+        {% endif %}
+        
+        <h1 class="text-xl font-bold">Duration of stay</h1>
+		<div class="w-[90%] mx-auto flex justify-items-stretch items-center border-0 gap-5 mb-8">
+            <input required id="checkin" name="checkin" type="text" placeholder="Check-in" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}"  class="rounded-lg w-full bg-proj-white p-2 border-none placeholder:text-black focus:outline-none">
+            <input required id="checkout" name="checkout" type="text" placeholder="Check-out" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" class="rounded-lg w-full bg-proj-white p-2 border-none placeholder:text-black focus:outline-none">
+		</div>
+
+		<div class="w-full flex gap-2 justify-stretch items-center">
+			<span class="text-xl font-bold">Your cats</span>
+			<button type="button" id="add-cat" onclick="generateCatComponent()"><img src="/static/images/add.svg" class="h-6 hover:scale-105 transition-all ease-in-out duration-150" alt="add more"></button>
+			<button type="button" id="remove-cat"><img src="/static/images/delete.svg" class="h-6 hover:scale-105 transition-all ease-in-out duration-150" alt="remove cat"></button>
+		</div>
+
+		<div id="catsbody" class="w-[90%] mx-auto flex flex-col items-center gap-4 mb-8">
+            <div class="w-full border-0 p-2 px-5 bg-proj-white transition-all duration-150 cursor-pointer rounded-lg relative"> 
+                <div  onclick="showCat(this.nextElementSibling)" class="flex items-center justify-between">
+                    <span>Cat 1</span>
+                    <!-- <input type="hidden" name="cat" value="1"> -->
+                    <img src="/static/images/down-arrow.svg" class="h-4" alt="down arrow">
+                </div>
+                <div class="hidden absolute top-full mt-2 left-0 z-10 w-full flex flex-col gap-4 py-4 px-5 justify-center items-center rounded-lg bg-proj-white">
+                    <div class="w-full flex items-center justify-stretch gap-4">
+                        <input required type="text" class="w-full p-2 rounded-md outline-none" placeholder="Cat name" name="cat-1-name">
+                        <select required class="w-full p-2.5 rounded-md outline-none" name="cat-1-gender">
+                            <option value="gender">Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="w-full flex items-center justify-stretch gap-4">
+                        <input required type="number" name="cat-1-age" class="w-full p-2 rounded-md outline-none" placeholder="Age (Years)">
+                        <input required type="number" name="cat-1-kg" class="w-full p-2 rounded-md outline-none" placeholder="Weight (in KG)">
+                    </div>
+                    <select required class="w-full p-2.5 rounded-md outline-none" name="cat-1-breed">
+                        <option value="type">Select breed</option>
+                        <option value="american shorthair">American Shorthair</option>
+                        <option value="maine coone">Maine Coon</option>
+                        <option value="persian">Persian</option>
+                        <option value="orange tabby">Orange Tabby</option>
+                        <option value="others">Others (if not known)</option>
+                    </select>
+                </div>
+            </div>
+		</div>
+
+		<span class="text-xl font-bold">Add-ons</span>
+
+		<div class="w-full grid grid-cols-4 gap-4 mb-8">
+			{% for service in services %}
+			<div class="h-fit w-full">
+				<label for="{{service['type']}}" class="h-56 rounded-lg flex justify-center items-center hover:scale-105 transition-all duration-150 overflow-hidden">
+                    <img src="/static/images/{{service['image']}}" alt="{{service['image']}}" class="w-80 aspect-square object-cover">
+				</label>
+				<div class="w-full flex p-2 gap-2 items-center justify-center">
+					<input class="w-4 h-4 rounded-md" id="{{service['type']}}" type="checkbox" name="service-{{loop.index0}}" value="{{service['price']}}" onclick="updateTotal()">
+					<label for="{{service['type']}}">{{service['type']}} RM{{service['price']}}</label>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+
+		<span class="text-xl font-bold">Additional Details (if any)</span>
+		<textarea class="w-full h-40 p-2 bg-proj-white outline-none rounded-md mb-8" placeholder="My cat likes shawarma!" name="details"></textarea>
+
+		<div class="flex flex-col items-start justify-center gap-2 mb-10">
+			<span class="text-xl font-bold">Total</span>
+			<span id="totalprice" class="text-3xl font-bold">RM {{room['price']}}</span>
+            <input type="hidden" name="total" id="totalprice-hidden" value="{{room['price']}}"> <!-- PUT THE TOTAL HERE TOO-->
+		</div>
+
+        <div class="flex flex-col items-center justify-center">
+            <input type="hidden" name="room-id" value="{{id}}">
+            <button type="submit" class="w-1/2 rounded-lg p-2 text-xl bg-proj-blue hover:scale-105 hover:bg-proj-orange hover:text-white transition-all duration-300 ease-in-out">Book!</button>
+        </div>
+	</form>
+</section>
+
+<script>
+	let count = 1;
+    let open;
+    function showCat(e) {
+        console.log("toggled details")
+        console.log(e)
+        if (e.classList.contains('hidden')) {
+            if (open) {
+                showCat(open)
+            }
+            e.classList.remove('hidden');
+            open = e;
+        } else {
+            e.classList.add('hidden');
+            open = null
+        }
+    }
+    
+    function generateCatComponent() {
+        // Create div element
+        var catDiv = document.createElement('div');
+        catDiv.className = 'w-full border-0 p-2 px-5 bg-proj-white transition-all duration-150 cursor-pointer rounded-lg relative';
+
+        var headDiv = document.createElement('div');
+        headDiv.className = 'flex items-center justify-between'
+        headDiv.onclick = function() {
+            showCat(this.nextElementSibling);
+        };
+        
+        
+        // Create span element for cat name
+        var catSpan = document.createElement('span');
+        catSpan.textContent = `Cat ${count + 1}`;
+        headDiv.appendChild(catSpan);
+
+        // Create img element for arrow
+        var arrowImg = document.createElement('img');
+        arrowImg.src = '/static/images/down-arrow.svg';
+        arrowImg.className = 'h-4';
+        arrowImg.alt = 'down arrow';
+        headDiv.appendChild(arrowImg);
+
+        // Create div for hidden content
+        var hiddenDiv = document.createElement('div');
+        hiddenDiv.className = 'hidden absolute top-full mt-2 left-0 z-10 w-full flex flex-col gap-4 py-4 px-5 justify-center items-center rounded-lg bg-proj-white';
+
+        // Create input and select elements
+        var input1 = document.createElement('input');
+        input1.required = true;
+        input1.type = 'text';
+        input1.className = 'w-full p-2 rounded-md outline-none';
+        input1.placeholder = 'Cat name';
+        input1.name = `cat-${count + 1}-name`;
+
+        var select1 = document.createElement('select');
+        select1.required = true;
+        select1.className = 'w-full p-2.5 rounded-md outline-none';
+        select1.name = `cat-${count + 1}-gender`;
+        var genderOption = document.createElement('option');
+        genderOption.value = 'gender';
+        genderOption.textContent = 'Gender';
+        select1.appendChild(genderOption);
+        var maleOption = document.createElement('option');
+        maleOption.value = 'male';
+        maleOption.textContent = 'Male';
+        select1.appendChild(maleOption);
+        var femaleOption = document.createElement('option');
+        femaleOption.value = 'female';
+        femaleOption.textContent = 'Female';
+        select1.appendChild(femaleOption);
+
+        var firstRow = document.createElement('div');
+        firstRow.className = 'w-full flex items-center justify-stretch gap-4';
+        firstRow.appendChild(input1);
+        firstRow.appendChild(select1);
+
+        hiddenDiv.appendChild(firstRow);
+        
+        // Append input and select elements to hidden div
+        // hiddenDiv.appendChild(input1);
+        // hiddenDiv.appendChild(select1);
+
+        // Create more input elements
+        var input2 = document.createElement('input');
+        input2.required = true;
+        input2.type = 'number';
+        input2.name = `cat-${count + 1}-age`;
+        input2.className = 'w-full p-2 rounded-md outline-none';
+        input2.placeholder = 'Age (Years)';
+
+        var input3 = document.createElement('input');
+        input3.required = true;
+        input3.type = 'number';
+        input3.name = `cat-${count + 1}-kg`;
+        input3.className = 'w-full p-2 rounded-md outline-none';
+        input3.placeholder = 'Weight (in KG)';
+
+        var secondRow = document.createElement('div');
+        secondRow.className = 'w-full flex items-center justify-stretch gap-4';
+        secondRow.appendChild(input2);
+        secondRow.appendChild(input3);
+
+        hiddenDiv.appendChild(secondRow);
+        
+        // Append more input elements to hidden div
+        // hiddenDiv.appendChild(input2);
+        // hiddenDiv.appendChild(input3);
+
+        // Create select element for breed
+        var select2 = document.createElement('select');
+        select2.required = true;
+        select2.className = 'w-full p-2.5 rounded-md outline-none';
+        select2.name = `cat-${count + 1}-breed`;
+        var breedOption = document.createElement('option');
+        breedOption.value = 'type';
+        breedOption.textContent = 'Select breed';
+        select2.appendChild(breedOption);
+        var breeds = ['American Shorthair', 'Maine Coon', 'Persian', 'Orange Tabby', 'Others (if not known)'];
+        breeds.forEach(function(breed) {
+            var option = document.createElement('option');
+            option.value = breed.toLowerCase().replace(/\s+/g, '-');
+            option.textContent = breed;
+            select2.appendChild(option);
+        });
+
+
+        // Append select element to hidden div
+        hiddenDiv.appendChild(select2);
+
+        // Append hidden div and headDiv to cat div
+        catDiv.appendChild(headDiv)
+        catDiv.appendChild(hiddenDiv);
+
+        // Append cat div to cat-body element
+        var catBody = document.getElementById('catsbody');
+
+        if(catBody.childElementCount < {{room['beds']}}) {
+            catBody.appendChild(catDiv);
+            count++
+        }
+        else{
+            alert("Maximum {{room['beds']}} cats");
+        }
+        updateTotal();
+    }
+    
+
+	document.getElementById("remove-cat").addEventListener("click", function () {
+		const parent = document.getElementById("catsbody");
+
+		if(parent.childElementCount > 1){
+			parent.removeChild(parent.lastElementChild);
+            count--
+		}
+		else{
+			alert("You must have at least one cat!");
+		}
+        updateTotal();
+	});
+
+    
+    function updateTotal() {
+        var totalcost = document.getElementById("totalprice");
+        var totalcost_hidden = document.getElementById('totalprice-hidden');
+        var total = 0.00;
+        var service0 = document.getElementsByName("service-0")[0];
+        var service1 = document.getElementsByName("service-1")[0];
+        var service2 = document.getElementsByName("service-2")[0];
+        var service3 = document.getElementsByName("service-3")[0];
+
+        if(service0.checked) {
+            total += parseFloat(service0.value);
+        }
+        if(service1.checked) {
+            total += parseFloat(service1.value);
+        }
+        if(service2.checked) {
+            total += parseFloat(service2.value);
+        }
+        if(service3.checked) {
+            total += parseFloat(service3.value);
+        }
+
+        var cats = count - 1;
+        const catcost = 10.00;
+        var totalcatcost = cats * catcost;
+
+        //document.getElementById("totalprice").innerHTML = "RM " + (total + {{room['price']}}).toFixed(2);
+        
+        //console.log("RM " + (total + {{room['price']}}).toFixed(2))
+        totalcost.innerHTML = "RM " + (total + totalcatcost + {{room['price']}}).toFixed(2);
+        totalcost_hidden.value = (total + totalcatcost + {{room['price']}}).toFixed(2);
+    }
+    
+	// hold on imma try something
+</script>
+
+{% endblock %}

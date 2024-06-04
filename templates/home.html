@@ -1,6 +1,158 @@
-{% extends base.html %}
-{% block title %}Home{% endblock %}
+{% extends 'base.html' %}
 
 {% block body %}
+<section class="h-screen p-16 pt-24 flex items-center">
+    <div class="flex flex-col gap-5 outline-1 rounded-l-3xl basis-1/2 h-3/4">
+        <h1 class="text-7xl">We’d Love to care for your little <span class="text-proj-blue"">Meow</span> <span class="text-proj-orange">Meows</span></h1>
+        <hr class="border-proj-blue border-2 to-pink-500 rounded-lg">
+        <p>Welcome to OnlyCats 🐾 – where every whisker is welcome! 🐱 Treat your feline friend to a paw-some vacation in our luxurious cat hotel. With plush bedding, endless toys, and purrsonalized care from our expert staff, your kitty will be in paradise. Don't let your cat miss out on the purr-fect getaway – <b>Book with OnlyCats today!</b></p>
+        <a href="#why-us" class="bg-proj-blue p-4 px-7 rounded-lg hover:bg-proj-orange w-52 transition transition-colors duration-150 ease-in-out text-center">Explore </a>
+    </div>
+    <div class="basis-1/2 h-full rounded-3xl">
+        <img src="/static/images/mainecoon.png" alt="meow" class="h-full object-contain ml-auto">
+    </div>
+    
+</section>
+<!-- <div class="scallop-up"></div> -->
+<section id="why-us" class="px-16 py-8">
+    <h1 class="text-3xl font-bold py-5 ">Why OnlyCats?</h1>
+    <div class="bg-proj-blue p-1 flex gap-1 rounded-lg">
+        <div class="rounded-md bg-proj-white w-1/3 p-5 hover:bg-proj-orange transition-colors duration-150 ease-in-out">
+            <h1 class="font-bold text-xl mb-3">Specialized Care</h1>
+            <p class="text-justify">
+                Our cat reservation services offer unparalleled care tailored to each individual cat's needs, ensuring they receive the attention and affection they deserve while you're away.
+            </p>
+        </div>
+        <div class="rounded-md bg-proj-white w-1/3 p-5 hover:bg-proj-orange transition-colors duration-150 ease-in-out">
+            <h1 class="font-bold text-xl mb-3">Trained Carers</h1>
+            <p class="text-justify">
+            With a team of highly trained and passionate professionals dedicated to feline well-being, rest assured your cat will be in the hands of experts who prioritize their health, happiness, and comfort at all times.
+            </p>
+        </div>
+        <div class="rounded-md bg-proj-white w-1/3 p-5 hover:bg-proj-orange transition-colors duration-150 ease-in-out">
+            <h1 class="font-bold text-xl mb-3">Regular Updates</h1>
+            <p class="text-justify">
+                Leave your worries behind knowing that our secure facilities and regular updates will keep you connected to your furry friend, allowing you to relax and enjoy your time away with full confidence in our top-notch service.
+            </p>
+        </div>
+    </div>
+</section>
+<section id="services" class="px-16 py-8">
+    <h1 class="text-3xl font-bold py-5 ">Our Services</h1>
+    <div class="w-full overflow-hidden" style="mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);">
+        <div x-data="{}"
+            x-init="$nextTick(() => {
+                let ul = $refs.services;
+                ul.insertAdjacentHTML('afterend', ul.outerHTML);
+                ul.nextSibling.setAttribute('aria-hidden', 'true');
+            })"
+            class="w-[200%] h-2/3 inline-flex flex-nowrap">
+            <ul x-ref="services" class=" flex animate-infinite-scroll">
+                {% for i in services %}
+                <li class="mx-8 text-center overflow-hidden relative">
+                    <img src="/static/images/{{ i['image'] }}" alt="cat hotel" class="w-60 aspect-square rounded-full object-cover">
+                    <hr class="w-full my-2 border-1 border-transparent">
+                    <span class="text-black font-bold text-center">{{ i['type'] }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</section>
 
+<section id="offers" class="px-16 py-8">
+    <div class="flex justify-between">
+        <h1 class="text-3xl font-bold py-5 ">Rooms we offer</h1>
+        <a href="/rooms" class="h-fit my-auto hover:scale-105">View All</a>
+    </div>
+    <div class="bg-proj-blue p-3 flex justify-between items-center gap-3 overflow-hidden rounded-lg">
+        <!-- <button class="bg-proj-orange aspect-square p-3 rounded-md h-fit">Prev</button> -->
+        <div class="w-full h-[50vh] overflow-x-scroll overflow-y-hidden snap-x snap-mandatory inline-flex flex-nowrap gap-3 rounded-lg" id="rooms-carousel" x-pos>
+            {% for i in rooms.keys() %}
+            <div class="min-w-fit min-h-full snap-center relative rounded-md overflow-hidden">
+                <img src="{{rooms[i]['image']}}" alt="{{rooms[i]['type']}}" class="h-full object-cover">
+                <div class="absolute bottom-0 left-0 -translate-x-2 translate-y-2 m-2 flex flex-col gap-1 p-3 w-full bg-slate-900 opacity-80 hover:opacity-100 transition-opacity duration-150 ease-in-out">
+                    <span class="font-bold text-white outline-white outline-1">{{rooms[i]['type']}}</span> 
+                    <a href="/reserve?id={{i}}" class="p-1 px-3 bg-proj-orange rounded-md hover:scale-105 transition-transform w-max">Learn more</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- <button class="bg-proj-orange aspect-square p-3 rounded-md h-fit">Next</button> -->
+    </div>
+</section>
+
+<section id="faq" class="px-16 py-8 mb-8">
+    <h1 class="text-3xl font-bold py-5 ">Frequently Asked Questions</h1>
+    <div class="flex gap-10 divide-x-4 divide-proj-blue pt-5">
+        <img src="/static/images/thinking.png" alt="thinking" class="w-1/4 h-fit my-auto">
+        <!-- <div class="h-full bg-proj-blue p-5 rounded-lg"></div> HORIZONTAL DIVIDER -->
+        <div class="w-full pl-10">
+            <div>
+                <h1 class="text-2xl font-bold pb-3">What are the accommodation options available for cats at the OnlyCats?</h1>
+                <p class="pb-5">
+                    At OnlyCats, we offer various accommodation options including cozy suites and spacious play areas for your feline companion's comfort.
+                </p>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold pb-3">How often are the cats fed and what type of food is provided?</h1>
+                <p class="pb-5">
+                    Cats at our hotel are fed high-quality cat food twice a day, with options for special dietary needs if required.
+                </p>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold pb-3">Is there a play area or socialization time for the cats at the hotel?</h1>
+                <p class="pb-5">
+                    Our cat hotel features a designated play area where cats can socialize and exercise under supervision.
+                </p>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold pb-3">What measures are taken to ensure the safety and well being of the cats during their stay?</h1>
+                <p class="pb-5">
+                    The safety and well being of our feline guests are our top priority, with 24/7 monitoring, secure enclosures, and veterinary care on call if needed.
+                </p>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold pb-3">How can I schedule a reservation for my cat at the hotel?</h1>
+                <p class="pb-5">
+                    To schedule a reservation for your cat at our hotel, simply give us a call or book online through our <a href="/rooms">website</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="feedback" class="px-16 py-8 mb-8">
+    <h1 class="text-3xl font-bold py-5 ">Customer Feedback</h1>
+    <div class="flex gap-1 p-1 justify-between rounded-lg bg-proj-blue">
+        <div class="p-3 px-8 bg-proj-white rounded-md w-full flex flex-col gap-3 items-center  hover:bg-proj-light-blue transition-colors duration-150 ease-in-out">
+            <div class="w-48 h-48 rounded-full overflow-hidden flex items-center">
+                <img src="/static/images/review1.jpg" class="w-full object-cover">
+            </div>
+            <h1 class="text-2xl font-bold">Jessica</h1>
+            <p class="italic text-sm">Owner of a 3 y/o Maine Coon</p>
+            <p class="italic text-justify">"The staff at OnlyCats were really professional and they knew exactly what my cat needed! My cat looks fluffier than before!"</p>
+        </div>
+        <div class="p-3 px-8 bg-proj-white rounded-md w-full flex flex-col gap-3 items-center hover:bg-proj-light-blue transition-colors duration-150 ease-in-out">
+            <div class="w-48 h-48 rounded-full overflow-hidden flex items-center">
+                <img src="/static/images/review2.jpg" class="h-full object-cover">
+            </div>
+            
+            <h1 class="text-2xl font-bold">Ryan Hafizur</h1>
+            <p class="italic text-sm">Owner of a 4 y/o Orange Tabby</p>
+            <p class="italic text-justify">"I really liked the service at OnlyCats. The staff was very friendly and helpful! They even provide CCTV monitoring! I feel happy knowing my cat is in safe hands!"</p>
+        </div>
+        <div class="p-3 px-8 bg-proj-white rounded-md w-full flex flex-col gap-3 items-center hover:bg-proj-light-blue transition-colors duration-150 ease-in-out">
+            <div class="w-48 h-48 rounded-full overflow-hidden flex items-center">
+                <img src="/static/images/review3.jpg" class="h-full object-cover">
+            </div>
+            <h1 class="text-2xl font-bold">Melinda</h1>
+            <p class="italic text-sm">Owner of a 2 y/o British Shorthair</p>
+            <p class="italic text-justify">"I was really impressed with the attention to detail and the care provided by the staff. They really know what a cat needs! Five star service!"</p>
+        </div>
+    </div>
+</section>
+
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<!-- <div class="scallop-down"></div> -->
 {% endblock %}
